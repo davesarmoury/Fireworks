@@ -12,6 +12,4 @@
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="position_trajectory_controller joint_state_controller"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-
-    <include file="$(find russell_fireworks_moveit_config)/launch/move_group.launch" />
 </launch>

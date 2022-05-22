@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find russell_fireworks_bringup)/launch/kuka.launch" />
+  <include file="$(find russell_fireworks_bringup)/launch/zed2i.launch" />
+</launch>

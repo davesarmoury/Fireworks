@@ -39,5 +39,5 @@
     <origin xyz="0 0 0.015" rpy="0 0 0"/>
   </joint>
 
-  <xacro:include filename="$(find zed_interfaces)/urdf/zed2i_descr.urdf.xacro"/>
+  <xacro:include filename="$(find russell_fireworks_description)/urdf/zed2i_descr.urdf.xacro"/>
 </robot>
