@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, Float32
 import Jetson.GPIO as GPIO
 
-servoPIN = 24
-GPIO.setmode(GPIO.BCM)
+servoPIN = 18
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(servoPIN, GPIO.OUT)
 
 MAX = 6.27450980392
@@ -14,7 +14,8 @@ MIN = 1.96078431373
 p = GPIO.PWM(servoPIN, 50)
 p.start(MIN)
 
-def callback(msg):
+def bool_callback(msg):
+    rospy.loginfo(msg.data)
     if msg.data:
         setpoint = MAX
     else:
@@ -22,10 +23,17 @@ def callback(msg):
 
     p.ChangeDutyCycle(setpoint)
 
+def float_callback(msg):
+    rospy.loginfo(msg.data)
+    setpoint = msg.data
+
+    p.ChangeDutyCycle(setpoint)
+
 def servo_driver():
     rospy.init_node('lighter', anonymous=True)
 
-    rospy.Subscriber("fire", Bool, callback)
+    rospy.Subscriber("fire", Bool, bool_callback)
+    rospy.Subscriber("angle", Float32, float_callback)
 
     p.ChangeDutyCycle(MAX)
     rospy.spin()
