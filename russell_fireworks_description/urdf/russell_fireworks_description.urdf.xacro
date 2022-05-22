@@ -2,5 +2,42 @@
 <robot name="kuka_kr10r1100sixx" xmlns:xacro="http://wiki.ros.org/xacro">
   <xacro:include filename="$(find kuka_kr10_support)/urdf/kr10r1100sixx_macro.xacro" />
   <xacro:kuka_kr10r1100sixx prefix=""/>
-  
+
+  <link name="russell_eoat_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <mesh filename="package://russell_fireworks_description/meshes/EOAT_Simple.stl" />
+      </geometry>
+      <material name="zed2i_mat"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <mesh filename="package://russell_fireworks_description/meshes/EOAT_Simple.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="russell_eoat_joint" type="fixed">
+    <parent link="tool0"/>
+    <child link="russell_eoat_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="zed_link" type="fixed">
+    <parent link="russell_eoat_link"/>
+    <child link="zed_mount_link"/>
+    <origin xyz="0.042516 -0.017 0.0482" rpy="0 0 3.14159"/>
+  </joint>
+
+  <link name="zed_mount_link" />
+
+  <joint name="zed_joint" type="fixed">
+    <parent link="zed_mount_link" />
+    <child link="zed_link" />
+    <origin xyz="0 0 0.015" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:include filename="$(find zed_interfaces)/urdf/zed2i_descr.urdf.xacro"/>
 </robot>
