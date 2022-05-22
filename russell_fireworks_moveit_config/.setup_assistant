@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: Dave Niewinski
     author_email: davesarmoury@gmail.com
-    generated_timestamp: 1653072745
+    generated_timestamp: 1653237488
