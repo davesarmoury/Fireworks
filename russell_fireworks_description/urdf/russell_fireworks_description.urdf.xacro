@@ -39,5 +39,13 @@
     <origin xyz="0 0 0.015" rpy="0 0 0"/>
   </joint>
 
+  <link name="hot_tcp_link" />
+
+  <joint name="hot_joint" type="fixed">
+    <parent link="russell_eoat_link" />
+    <child link="hot_tcp_link" />
+    <origin xyz="-0.1381 -0.017 0.0256" rpy="0 1.5708 3.14159"/>
+  </joint>
+
   <xacro:include filename="$(find russell_fireworks_description)/urdf/zed2i_descr.urdf.xacro"/>
 </robot>
