@@ -8,8 +8,8 @@ servoPIN = 18
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(servoPIN, GPIO.OUT)
 
-MAX = 6.27450980392
-MIN = 1.96078431373
+MIN = 1.0
+MAX = 12.0
 
 p = GPIO.PWM(servoPIN, 50)
 p.start(MIN)

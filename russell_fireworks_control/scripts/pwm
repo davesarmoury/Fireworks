@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sudo /bin/busybox devmem 0x02434040 w 0x401
