@@ -7,28 +7,79 @@ import geometry_msgs.msg
 from math import pi
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
+from tf.transformations import quaternion_from_euler
 
-scan_axes = []
-#scan_axes.append([0.0, -0.747000919853573, 1.911135530933791, 0.0, 0.4066617157146788, 0.0])
-scan_axes.append([-1.684242728174528, -0.9738937226128358, 2.368411794956305, -0.0017453292519943296, 0.17627825445142728, -0.47647488579445196])
-scan_axes.append([-0.3246312408709453, -0.747000919853573, 1.911135530933791, 0.0, 0.4066617157146788, 0.32288591161895097])
-scan_axes.append([0.3246312408709453, -0.747000919853573, 1.911135530933791, 0.0, 0.4066617157146788, -0.32288591161895097])
-scan_axes.append([1.684242728174528, -0.9738937226128358, 2.368411794956305, 0.0017453292519943296, 0.17627825445142728, 0.47647488579445196])
-scan_axes.append([0.0, -1.5708, 1.5708, 0.0, 1.5708, 0.0])
+home = [0.0, -1.5708, 1.5708, 0.0, 1.5708, 0.0]
 
-moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('russell_fireworks_scan')
+cart_poses = []
+cart_poses.append([0.027, 0.560, 0.231, -3.140, -1.066, 1.176])
+cart_poses.append([0.767, 0.267, 0.203, 3.139, -1.364, 0.820])
+cart_poses.append([0.767, -0.267, 0.203, 3.139, -1.364, -0.820])
+cart_poses.append([0.027, -0.560, 0.231, -3.140, -1.066, -1.176])
 
-robot = moveit_commander.RobotCommander()
+def cart_goal(pos):
+    pose_goal = geometry_msgs.msg.Pose()
+    pose_goal.position.x = pos[0]
+    pose_goal.position.y = pos[1]
+    pose_goal.position.z = pos[2]
 
-group_name = "manipulator"
-group = moveit_commander.MoveGroupCommander(group_name)
+    q = quaternion_from_euler(pos[3], pos[4], pos[5])
+    pose_goal.orientation.x = q[0]
+    pose_goal.orientation.y = q[1]
+    pose_goal.orientation.z = q[2]
+    pose_goal.orientation.w = q[3]
 
-group.set_max_velocity_scaling_factor(0.05)
-group.set_max_acceleration_scaling_factor(0.05)
+    return pose_goal
 
+def cart_joint_move(move_group, pos):
+    pose_goal = cart_goal(pos)
 
-for i in scan_axes:
-    joint_goal = i
-    group.go(joint_goal, wait=True)
+    move_group.set_pose_target(pose_goal)
+
+    plan = move_group.go(wait=True)
+    move_group.stop()
+
+    move_group.clear_pose_targets()
+
+def cart_lin_move(move_group, pos):
+    waypoints = []
+    waypoints.append(cart_goal(pos))
+
+    replans = 10
+
+    while replans > 0:
+        (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0)
+        if fraction > 0.99:
+            move_group.execute(plan, wait=True)
+            move_group.stop()
+            break
+        replans = replans - 1
+    else:
+        rospy.logwarn("Replanning failed")
+
+def main():
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node('russell_fireworks_scan')
+
+    robot = moveit_commander.RobotCommander()
+
+    group_name = "manipulator"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    group.set_max_velocity_scaling_factor(0.25)
+    group.set_max_acceleration_scaling_factor(0.25)
+
+    group.go(home, wait=True)
     group.stop()
+
+    cart_joint_move(move_group, cart_poses[1])
+    cart_lin_move(move_group, cart_poses[0])
+    cart_lin_move(move_group, cart_poses[1])
+    cart_lin_move(move_group, cart_poses[2])
+    cart_lin_move(move_group, cart_poses[3])
+    cart_lin_move(move_group, cart_poses[2])
+
+    group.go(home, wait=True)
+    group.stop()
+
+main()
