@@ -35,7 +35,7 @@ def servo_driver():
     rospy.Subscriber("fire", Bool, bool_callback)
     rospy.Subscriber("angle", Float32, float_callback)
 
-    p.ChangeDutyCycle(MAX)
+    p.ChangeDutyCycle(MIN)
     rospy.spin()
 
 if __name__ == '__main__':
