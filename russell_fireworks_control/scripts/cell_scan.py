@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import copy
 import rospy
@@ -66,18 +68,18 @@ def main():
     group_name = "manipulator"
     group = moveit_commander.MoveGroupCommander(group_name)
 
-    group.set_max_velocity_scaling_factor(0.25)
-    group.set_max_acceleration_scaling_factor(0.25)
+    group.set_max_velocity_scaling_factor(0.1)
+    group.set_max_acceleration_scaling_factor(0.1)
 
     group.go(home, wait=True)
     group.stop()
 
-    cart_joint_move(move_group, cart_poses[1])
-    cart_lin_move(move_group, cart_poses[0])
-    cart_lin_move(move_group, cart_poses[1])
-    cart_lin_move(move_group, cart_poses[2])
-    cart_lin_move(move_group, cart_poses[3])
-    cart_lin_move(move_group, cart_poses[2])
+    cart_joint_move(group, cart_poses[1])
+    cart_lin_move(group, cart_poses[0])
+    cart_lin_move(group, cart_poses[1])
+    cart_lin_move(group, cart_poses[2])
+    cart_lin_move(group, cart_poses[3])
+    cart_lin_move(group, cart_poses[2])
 
     group.go(home, wait=True)
     group.stop()

@@ -9,5 +9,5 @@
   <license>CC-BY-3</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-
+  <exec_depend>moveit_commander</exec_depend>
 </package>
