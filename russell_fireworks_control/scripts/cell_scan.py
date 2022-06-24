@@ -33,27 +33,29 @@ def cart_goal(pos):
 
     return pose_goal
 
-def cart_joint_move(move_group, pos):
+def cart_joint_move(group, pos):
     pose_goal = cart_goal(pos)
 
-    move_group.set_pose_target(pose_goal)
+    group.set_pose_target(pose_goal)
 
-    plan = move_group.go(wait=True)
-    move_group.stop()
+    plan = group.go(wait=True)
+    group.stop()
 
-    move_group.clear_pose_targets()
+    group.clear_pose_targets()
 
-def cart_lin_move(move_group, pos):
+def cart_lin_move(group, pos):
     waypoints = []
     waypoints.append(cart_goal(pos))
 
     replans = 10
 
     while replans > 0:
-        (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0)
+        (plan, fraction) = group.compute_cartesian_path(waypoints, 0.01, 0.0)
         if fraction > 0.99:
-            move_group.execute(plan, wait=True)
-            move_group.stop()
+            plan = group.retime_trajectory(group.get_current_state(), plan, 0.5, 0.5, "iterative_spline_parameterization")
+
+            group.execute(plan, wait=True)
+            group.stop()
             break
         replans = replans - 1
     else:
