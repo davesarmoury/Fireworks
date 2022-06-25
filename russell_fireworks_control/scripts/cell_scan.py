@@ -43,18 +43,26 @@ def cart_joint_move(group, pos):
 
     group.clear_pose_targets()
 
-def cart_lin_move(group, pos):
+def cart_lin_move(group, pos, continuous=True):
     waypoints = []
     waypoints.append(cart_goal(pos))
+
+    if continuous:
+        cart_step = 0.01
+    else:
+        cart_step = 0.1
 
     replans = 10
 
     while replans > 0:
-        (plan, fraction) = group.compute_cartesian_path(waypoints, 0.01, 0.0)
+        (plan, fraction) = group.compute_cartesian_path(waypoints, cart_step, 0.0)
         if fraction > 0.99:
-            plan = group.retime_trajectory(group.get_current_state(), plan, 0.5, 0.5, "iterative_spline_parameterization")
-
-            group.execute(plan, wait=True)
+            if continuous:
+                group.execute(plan, wait=True)
+            else:
+                for p in plan.joint_trajectory.points:
+                    group.go(p.positions, wait=True)
+                    group.stop()
             group.stop()
             break
         replans = replans - 1
@@ -78,9 +86,17 @@ def main():
 
     cart_joint_move(group, cart_poses[1])
     cart_lin_move(group, cart_poses[0])
-    cart_lin_move(group, cart_poses[1])
-    cart_lin_move(group, cart_poses[2])
-    cart_lin_move(group, cart_poses[3])
+
+    group.set_max_velocity_scaling_factor(0.5)
+    group.set_max_acceleration_scaling_factor(0.5)
+
+    cart_lin_move(group, cart_poses[1], False)
+    cart_lin_move(group, cart_poses[2], False)
+    cart_lin_move(group, cart_poses[3], False)
+
+    group.set_max_velocity_scaling_factor(0.1)
+    group.set_max_acceleration_scaling_factor(0.1)
+
     cart_lin_move(group, cart_poses[2])
 
     group.go(home, wait=True)
