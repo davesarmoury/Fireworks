@@ -1,0 +1,98 @@
+---
+show_order:
+  -
+    delay: 0
+    home: true
+    number: 15
+  -
+    delay: 0
+    home: true
+    number: 12
+  -
+    delay: 0
+    home: true
+    number: 2
+  -
+    delay: 0
+    home: true
+    number: 0
+  -
+    delay: 0
+    home: true
+    number: 7
+  -
+    delay: 0
+    home: true
+    number: 6
+  -
+    delay: 0
+    home: true
+    number: 11
+  -
+    delay: 0
+    home: true
+    number: 14
+  -
+    delay: 0
+    home: true
+    number: 10
+  -
+    delay: 0
+    home: true
+    number: 16
+  -
+    delay: 0
+    home: true
+    number: 3
+  -
+    delay: 0
+    home: true
+    number: 1
+  -
+    delay: 0
+    home: true
+    number: 5
+  -
+    delay: 0
+    home: true
+    number: 18
+  -
+    delay: 0
+    home: true
+    number: 9
+  -
+    delay: 0
+    home: true
+    number: 13
+  -
+    delay: 0
+    home: true
+    number: 17
+  -
+    delay: 0
+    home: true
+    number: 24
+  -
+    delay: 0
+    home: true
+    number: 22
+  -
+    delay: 0
+    home: true
+    number: 27
+  -
+    delay: 0
+    home: true
+    number: 20
+  -
+    delay: 0
+    home: true
+    number: 26
+  -
+    delay: 0
+    home: true
+    number: 25
+  -
+    delay: 0
+    home: true
+    number: 21

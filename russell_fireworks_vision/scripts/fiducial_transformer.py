@@ -45,6 +45,9 @@ def listener():
     rate = rospy.Rate(2.0)
 
     while not rospy.is_shutdown():
+        outFile = open("/home/davesarmoury/ws/fireworks_ws/src/Fireworks/russell_fireworks_vision/launch/static_transforms.launch", 'w')
+        outFile.write("<launch>\n")
+
         dict_lock.acquire()
         for i, f in frames.items():
             scale, shear, angles, translate, perspective = decompose_matrix(f[1])
@@ -53,6 +56,19 @@ def listener():
                      rospy.Time.now(),
                      "F_" + str(i),
                      "base_link")
+
+            QQ = tf.transformations.quaternion_from_euler(angles[0], angles[1], angles[2])
+            outFile.write("  <node pkg=\"tf\" type=\"static_transform_publisher\" name=\"F_" + str(i) + "_broadcaster\" args=\"")
+            outFile.write(str(translate[0]) + " ")
+            outFile.write(str(translate[1]) + " ")
+            outFile.write(str(translate[2]) + " ")
+            outFile.write(str(QQ[0]) + " ")
+            outFile.write(str(QQ[1]) + " ")
+            outFile.write(str(QQ[2]) + " ")
+            outFile.write(str(QQ[3]) + " base_link F_" + str(i) + " 100\" />\n")
+
+        outFile.write("</launch>\n")
+        outFile.close()
 
         print("TOTAL RECORDED: " + str(len(frames)))
         dict_lock.release()
