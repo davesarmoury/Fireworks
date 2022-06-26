@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>russell_fireworks_vision</name>
+  <version>0.0.0</version>
+  <description>The russell_fireworks_vision package</description>
+
+  <maintainer email="davesarmoury@gmail.com">Dave Niewinski</maintainer>
+
+  <license>CC-BY-3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>aruco_detect</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>tf</exec_depend>
+
+</package>
