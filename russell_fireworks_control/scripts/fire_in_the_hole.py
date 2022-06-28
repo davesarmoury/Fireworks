@@ -8,13 +8,21 @@ import yaml
 import sys
 import tf
 import geometry_msgs
+from std_msgs.msg import Bool
 
-home = [0.0, -1.5708, 1.5708, 0.0, 1.5708, 0.0]
+home = [0.0, -1.160643952576229, 2.558652683423687, 0.0, 0.2984513020910304, 0.0]
 
 frame_naming = ["F_", "_Fuse"]
 
 with open("../data/show.yaml", 'r') as stream:
     show = yaml.safe_load(stream)
+
+def fire():
+    global fire_pub
+    fire_pub.publish(True)
+    rospy.sleep(1.4)
+    fire_pub.publish(False)
+    rospy.sleep(0.1)
 
 def cart_goal(pos, quat=False):
     pose_goal = geometry_msgs.msg.Pose()
@@ -71,8 +79,12 @@ def cart_lin_move(group, pos, continuous=True):
         rospy.logwarn("Replanning failed")
 
 def main():
+    global fire_pub
     moveit_commander.roscpp_initialize(sys.argv)
     rospy.init_node('russell_fireworks')
+
+    fire_pub = rospy.Publisher('/fire', Bool, queue_size=1)
+
     listener = tf.TransformListener()
 
     robot = moveit_commander.RobotCommander()
@@ -94,9 +106,12 @@ def main():
         rospy.loginfo(rot)
         pose = [trans[0], trans[1], trans[2], rot[0], rot[1], rot[2], rot[3]]
         cart_joint_move(group, pose, True)
+        fire()
+
         if fw["home"]:
             group.go(home, wait=True)
             group.stop()
+
         rospy.sleep(fw["delay"])
 
     group.go(home, wait=True)
