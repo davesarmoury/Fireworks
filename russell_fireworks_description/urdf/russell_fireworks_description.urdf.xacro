@@ -3,6 +3,28 @@
   <xacro:include filename="$(find kuka_kr10_support)/urdf/kr10r1100sixx_macro.xacro" />
   <xacro:kuka_kr10r1100sixx prefix=""/>
 
+  <link name="platform_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <mesh filename="package://russell_fireworks_description/meshes/Platform.stl" />
+      </geometry>
+      <material name="zed2i_mat"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <mesh filename="package://russell_fireworks_description/meshes/Platform.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="platform_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="platform_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
   <link name="russell_eoat_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
