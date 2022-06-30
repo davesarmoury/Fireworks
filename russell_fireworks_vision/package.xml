@@ -12,5 +12,7 @@
   <exec_depend>aruco_detect</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>tf</exec_depend>
+  <exec_depend>depth_image_proc</exec_depend>
+  <exec_depend>octomap_server</exec_depend>
 
 </package>

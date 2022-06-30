@@ -1,0 +1,17 @@
+<launch>
+  <node name="octomap_server" type="octomap_server_node" pkg="octomap_server">
+    <param name="frame_id" value="base_link" />
+    <param name="base_frame_id" value="base_link" />
+    <param name="resolution" value="0.03" />
+  </node>
+
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+
+  <node pkg="nodelet" type="nodelet" name="nodelet1" args="load depth_image_proc/point_cloud_xyz nodelet_manager" >
+    <remap from="/camera_info" to="/zed2i/zed_node/depth/camera_info" />
+    <remap from="/image_rect_color" to="/zed2i/zed_node/left/image_rect_color" />
+    <remap from="/image_rect" to="/zed2i/zed_node/depth/depth_registered" />
+    <remap from="/points" to="/cloud_in" />
+  </node>
+
+</launch>
